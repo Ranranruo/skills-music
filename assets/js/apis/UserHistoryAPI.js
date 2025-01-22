@@ -32,6 +32,7 @@ class UserHistoryAPI {
 
   setQuery(query) {
     this.query = query;
+    this.saveData();
   }
 }
 

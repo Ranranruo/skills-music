@@ -44,7 +44,7 @@ class Album {
         </span>
         <span>
           <i class="fa fa-money"> 가격</i>
-          <p>￦${this.#price}</p>
+          <p>￦${parseInt(this.#price).toLocaleString("ko-KR")}원</p>
         </span>
         <span class="shopbtn">
           <button class="btn btn-default btn-xs">
@@ -54,14 +54,19 @@ class Album {
       </div>
     </div>`;
   }
+
+  getElement() {
+    return this.#element;
+  }
   
   getCategory() {
     return this.#category;
   }
 
-  getElement() {
-    return this.#element;
+  getRelease() {
+    return this.#release;
   }
+
 };
 
 export default Album;

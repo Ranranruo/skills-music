@@ -2,6 +2,7 @@ class AlbumList {
   #element = document.createElement("div");
   #albums = [];
   #activeCategoryNames = "*";
+  #sortByDate = null;
   async init() {
     this.#element.classList.add("contents", "col-md-12");
 
@@ -13,6 +14,7 @@ class AlbumList {
     this.#element.innerHTML = "";
 
     if(this.#activeCategoryNames != "*") albums = this.#categoryFilter(albums);
+    if(this.#sortByDate != null) albums =
     albums.forEach((album) => {
       this.#element.append(album.getElement());
     });
@@ -20,6 +22,12 @@ class AlbumList {
   
   #categoryFilter(albums) {
     return albums.filter((album) => this.#activeCategoryNames.includes(album.getCategory()));
+  }
+
+  #sortByDate(albums) {
+    return albums.toSorted((aAlbum, bAlbum) => {
+      
+    });
   }
 
   getElement() {

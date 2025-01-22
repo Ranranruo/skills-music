@@ -113,6 +113,10 @@ class App {
     
     this.#search = new Search();
     this.#search.init(query);
+
+    this.#search.setInputEventFunction((event) => {
+      this.#userHistoryAPI.setQuery(this.#search.getQuery());
+    });
   }
 }
 
