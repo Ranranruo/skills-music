@@ -14,7 +14,7 @@ class AlbumList {
     this.#element.innerHTML = "";
 
     if(this.#activeCategoryNames != "*") albums = this.#categoryFilter(albums);
-    if(this.#sortByDate != null) albums =
+    // if(this.#sortByDate != null) albums =
     albums.forEach((album) => {
       this.#element.append(album.getElement());
     });
@@ -26,7 +26,7 @@ class AlbumList {
 
   #sortByDate(albums) {
     return albums.toSorted((aAlbum, bAlbum) => {
-      
+
     });
   }
 
