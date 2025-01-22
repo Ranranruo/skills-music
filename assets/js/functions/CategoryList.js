@@ -2,7 +2,6 @@ import Category from "../classes/Category.js";
 
 class CategoryList {
   #element = document.createElement("ul");
-  #data = [];
   #categorys = [];
   #notifyFunction = () => {};
   async init() {
