@@ -24,11 +24,11 @@ class AlbumList {
     return albums.filter((album) => this.#activeCategoryNames.includes(album.getCategory()));
   }
 
-  #sortByDate(albums) {
-    return albums.toSorted((aAlbum, bAlbum) => {
+  // #sortByDate(albums) {
+  //   return albums.toSorted((aAlbum, bAlbum) => {
 
-    });
-  }
+  //   });
+  // }
 
   getElement() {
     return this.#element;
