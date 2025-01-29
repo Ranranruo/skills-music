@@ -2,7 +2,7 @@ class AlbumList {
   #element = document.createElement("div");
   #albums = [];
   #activeCategoryNames = "*";
-  #sortByDate = null;
+  #dateOrder = null;
   async init() {
     this.#element.classList.add("contents", "col-md-12");
 
@@ -14,7 +14,7 @@ class AlbumList {
     this.#element.innerHTML = "";
 
     if(this.#activeCategoryNames != "*") albums = this.#categoryFilter(albums);
-    // if(this.#sortByDate != null) albums =
+    if(this.#dateOrder != null) albums = this.#orderByDate(albums);
     albums.forEach((album) => {
       this.#element.append(album.getElement());
     });
@@ -24,11 +24,13 @@ class AlbumList {
     return albums.filter((album) => this.#activeCategoryNames.includes(album.getCategory()));
   }
 
-  // #sortByDate(albums) {
-  //   return albums.toSorted((aAlbum, bAlbum) => {
-
-  //   });
-  // }
+  #orderByDate(albums) {
+    if(!(this.#dateOrder === "asc" || this.#dateOrder === "desc")) return albums;
+    const sortNum = this.#dateOrder === "asc" ? 1 : -1;
+    return albums.toSorted((aAlbum, bAlbum) => {
+      return (new Date(bAlbum.getRelease()) - new Date(aAlbum.getRelease())) * sortNum;
+    });
+  }
 
   getElement() {
     return this.#element;
@@ -42,6 +44,10 @@ class AlbumList {
   setActiveCategoryNames(activeCategoryNames) {
     this.#activeCategoryNames = activeCategoryNames;
     this.render();
+  }
+
+  setDateOrder(dateOrder) {
+
   }
 }
 export default AlbumList;
