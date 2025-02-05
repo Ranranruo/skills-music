@@ -26,7 +26,7 @@ class AlbumList {
 
   #orderByDate(albums) {
     if(!(this.#dateOrder === "asc" || this.#dateOrder === "desc")) return albums;
-    const sortNum = this.#dateOrder === "asc" ? 1 : -1;
+    const sortNum = this.#dateOrder === "desc" ? 1 : -1;
     return albums.toSorted((aAlbum, bAlbum) => {
       return (new Date(bAlbum.getRelease()) - new Date(aAlbum.getRelease())) * sortNum;
     });
@@ -34,6 +34,10 @@ class AlbumList {
 
   getElement() {
     return this.#element;
+  }
+
+  getAlbums() {
+    return this.#albums;
   }
 
   addAlbum(album) {
@@ -47,7 +51,9 @@ class AlbumList {
   }
 
   setDateOrder(dateOrder) {
-
+    if(!(dateOrder == "desc" || dateOrder == "asc")) return;
+    this.#dateOrder = dateOrder;
+    this.render();
   }
 }
 export default AlbumList;

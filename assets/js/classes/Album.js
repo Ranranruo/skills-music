@@ -1,25 +1,32 @@
 class Album {
   #element = document.createElement("div");
+  #idx = null;
   #category = "";
-  #jaketImage = "";
+  #imageSrc = "";
   #name = "";
   #artist = "";
   #release = "";
   #price = 0;
+  #cartCount = 0;
+  #clickAddButtonEventFunction = () => {};
   init({
+    idx,
     category,
     albumJaketImage,
     albumName,
     artist,
     release,
-    price
+    price,
+    cartCount
   } = {}) {
+    this.#idx = idx;
     this.#category = category;
-    this.#jaketImage = albumJaketImage;
+    this.#imageSrc = albumJaketImage;
     this.#name = albumName;
     this.#artist = artist;
     this.#release = release;
     this.#price = price;
+    this.#cartCount = cartCount;
 
     this.#element.classList.add("col-md-2", "col-sm-2", "col-xs-2", "product-grid");
 
@@ -30,7 +37,7 @@ class Album {
     this.#element.innerHTML = `
     <div class="product-items">
       <div class="project-eff">
-        <img class="img-responsive" src="images/${this.#jaketImage}" alt="${this.#name}">
+        <img class="img-responsive" src="images/${this.#imageSrc}" alt="${this.#name}">
       </div>
       <div class="produ-cost">
         <h5>${this.#name}</h5>
@@ -48,11 +55,21 @@ class Album {
         </span>
         <span class="shopbtn">
           <button class="btn btn-default btn-xs">
-            <i class="fa fa-shopping-cart"></i> 추가하기 (1개) 
+            <i class="fa fa-shopping-cart"></i> 추가하기 ${this.#cartCount ? `(${this.#cartCount}개)` : ""} 
           </button>
         </span>
       </div>
     </div>`;
+    this.applyEvents();
+  }
+
+  applyEvents() {
+    const addButton = this.#element.querySelector(".shopbtn > button");
+    addButton.addEventListener("click", () => this.#clickAddButtonEventFunction(this));
+  }
+
+  getIdx() {
+    return this.#idx;
   }
 
   getElement() {
@@ -67,6 +84,27 @@ class Album {
     return this.#release;
   }
 
+  getCartCount() {
+    return this.#cartCount;
+  }
+  
+  setCartCount(cartCount) {
+    this.#cartCount = cartCount;
+    this.render();
+  }
+  increaseCartCount() {
+    this.#cartCount = this.#cartCount + 1;
+    this.render();
+  }
+  decreaseCartCount() {
+    this.#cartCount = this.#cartCount--;
+    if(this.#cartCount < 0) this.#cartCount = 0;
+    this.render();
+  }
+  setClickAddButtonEventFunction(clickAddButtonEventFunction) {
+    this.#clickAddButtonEventFunction = clickAddButtonEventFunction;
+    this.render();
+  }
 };
 
 export default Album;

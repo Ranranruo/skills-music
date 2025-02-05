@@ -13,6 +13,15 @@ class MusicAPI {
     const json = await response.json();
     this.#data = json.data;
   }
+  
+  indexingData(data) {
+    return data.map((data, idx) => {
+      return {
+        idx: idx,
+        ...data
+      }
+    })
+  }
 
   async refresh() {
     // #refreshedTime 에 현재 시간을 타임스탬프로 저장 후 fetchData 메서드 실행
@@ -29,7 +38,17 @@ class MusicAPI {
 
   async findAll() {
     await this.refreshCheck();
-    return this.#data;
+    return this.indexingData(this.#data);
+  }
+
+  async findAllByIdxs(idxs) {
+    await this.refreshCheck();
+    return this.indexingData(this.#data).filter(data => idxs.includes(data.idx));
+  }
+
+  async findByIdx(idx) {
+    await this.refreshCheck();
+    return this.indexingData(this.#data).find(data => data.idx == idx);
   }
 
   async findDistinctCategory() {
