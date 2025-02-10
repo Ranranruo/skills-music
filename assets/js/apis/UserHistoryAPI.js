@@ -2,7 +2,7 @@ class UserHistoryAPI {
   activeCategoryNames = null;
   query = "";
   cart = [];
-  #cartNotifyFunction = async () => {};
+  #cartNotifyFunction = [()=>{}];
   async init() {
     this.fetchData();
     this.saveData();
@@ -14,7 +14,7 @@ class UserHistoryAPI {
     this.query = userHistory?.query ?? "";
     this.cart = userHistory?.cart ?? [];
     
-    await this.#cartNotifyFunction();
+    await this.#cartNotifyFunction.forEach(async(func) => await func());
   }
 
   saveData() {
@@ -46,12 +46,33 @@ class UserHistoryAPI {
   setCart(cart) {
     this.cart = cart;
     this.saveData();
-    this.#cartNotifyFunction();
+    this.#cartNotifyFunction.forEach(func => func());
   }
 
+  setCartCountByIdx(idx, count) {
+    this.cart = this.cart.map(cartCount => {
+      if(cartCount.idx == idx)
+        cartCount.count = count;
+      return cartCount;
+    })
+    this.saveData();
+    this.#cartNotifyFunction.forEach(func => func());
+  }
+
+  removeCartCountByIdx(idx) {
+    this.cart = this.cart.filter(cartCount => cartCount.idx != idx);
+    console.log(idx);
+    this.saveData();
+    this.#cartNotifyFunction.forEach(func => func());
+  }
+  
   async setCartNotifyFunction(cartNotifyFunction) {
     await cartNotifyFunction();
     this.#cartNotifyFunction = cartNotifyFunction;
+  }
+  async addCartNotifyFunction(cartNotifyFunction) {
+    await cartNotifyFunction();
+    this.#cartNotifyFunction.push(cartNotifyFunction);
   }
 }
 

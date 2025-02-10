@@ -45,14 +45,9 @@ class App {
 
     const albumsData = await this.#musicAPI.findAll();
 
-    const userCart = this.#userHistoryAPI.getCart();
     albumsData.forEach((data) => {
       const album = new Album();
-      const cartCount = userCart.find((cart) => cart.idx == data.idx);
-      album.init({
-        ...data,
-        cartCount: cartCount?.count ?? 0,
-      });
+      album.init({ ...data, cartCount: 0 });
       this.#albumList.addAlbum(album);
     });
     const albums = this.#albumList.getAlbums();
@@ -73,6 +68,13 @@ class App {
       });
     });
 
+    this.#userHistoryAPI.addCartNotifyFunction(() => {
+      const userCart = this.#userHistoryAPI.getCart();
+      this.#albumList.getAlbums().forEach((album) => {
+        const cartCount = userCart.find((cart) => cart.idx == album.getIdx());
+        album.setCartCount(cartCount?.count ?? 0);
+      });
+    });
     // data
 
     const albumListContainer = this.#element.querySelector(
@@ -162,7 +164,7 @@ class App {
     this.#cart = new Cart();
     this.#cart.init();
 
-    this.#userHistoryAPI.setCartNotifyFunction(async () => {
+    this.#userHistoryAPI.addCartNotifyFunction(async () => {
       const cart = this.#cart;
       const cartData = this.#userHistoryAPI.getCart();
       const cartIdxs = cartData.map((data) => data.idx);
@@ -174,7 +176,23 @@ class App {
           ...cartAlbumData,
           count: cartData.find((data) => data.idx == cartAlbumData.idx).count,
         });
-
+        cartAlbum.setChangeCountEventFunction((cartAlbum) => {
+          const value = cartAlbum.getElement().querySelector("input").value;
+          cartAlbum.setCount(value);
+          this.#userHistoryAPI.setCartCountByIdx(
+            cartAlbum.getIdx(),
+            parseInt(value)
+          );
+          if (value <= 0) {
+            this.#cart.removeCartAlbum(cartAlbum);
+            this.#userHistoryAPI.removeCartCountByIdx(cartAlbum.getIdx());
+          }
+        });
+        cartAlbum.setDeleteEventFunction((cartAlbum) => {
+          if(!confirm("정말 삭제 하시겠습니까?")) return;
+          const idx = cartAlbum.getIdx();
+          this.#userHistoryAPI.removeCartCountByIdx(idx);
+        })
         return cartAlbum;
       });
       cart.setCartAlbums(cartAlbums);

@@ -5,9 +5,9 @@ class CartAlbum {
   #name = "";
   #artist = "";
   #release = "";
-  #price = 0;
+  #price = "0원";
   #total = 0;
-  #count = "0원";
+  #count = 0;
   #deleteEventFunction = () => {};
   #changeCountEventFunction = () => {};
   init({
@@ -26,7 +26,6 @@ class CartAlbum {
     this.#release = release;
     this.#price = price;
     this.#count = count;
-    console.log(this)
     this.render();
   }
   render() {
@@ -59,20 +58,47 @@ class CartAlbum {
         <i class="fa fa-trash-o"></i> 삭제
       </button>
     </td>`;
+    this.applyEvents();
   }
   
   applyEvents() {
+    const deleteButton = this.#element.querySelector("button");
+    const countInput = this.#element.querySelector("input");
 
+    deleteButton.addEventListener("click", () => { this.#deleteEventFunction(this) });
+    countInput.addEventListener("change", () => { this.#changeCountEventFunction(this) })
   }
 
   getElement() {
     return this.#element;
   }
 
-  setDeleteEventFunction(deleteEventFunction) {
-    this.#deleteEventFunction = deleteEventFunction;
+  getIdx() {
+    return this.#idx;
   }
 
+  getPrice() {
+    return this.#price;
+  }
+
+  getCount() {
+    return this.#count
+  }
+
+  setCount(count) {
+    this.#count = count;
+    this.render();
+  }
+
+  setDeleteEventFunction(deleteEventFunction) {
+    this.#deleteEventFunction = deleteEventFunction;
+    this.render();
+  }
+
+  setChangeCountEventFunction(changeCountEventFunction) {
+    this.#changeCountEventFunction = changeCountEventFunction;
+    this.render();
+  }
 
 }
 

@@ -29,7 +29,6 @@ class Album {
     this.#cartCount = cartCount;
 
     this.#element.classList.add("col-md-2", "col-sm-2", "col-xs-2", "product-grid");
-
     this.render();
   }
 
@@ -93,6 +92,7 @@ class Album {
     this.render();
   }
   increaseCartCount() {
+    console.log(this.#cartCount)
     this.#cartCount = this.#cartCount + 1;
     this.render();
   }
