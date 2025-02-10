@@ -161,28 +161,24 @@ class App {
   async cart() {
     this.#cart = new Cart();
     this.#cart.init();
-    
-    const cartRender = () => {};
 
-    const cart = this.#cart;
-    const cartData = this.#userHistoryAPI.getCart();
-    const cartIdxs = cartData.map((data) => data.idx);
-    const cartAlbumsData = await this.#musicAPI.findAllByIdxs(cartIdxs);
+    this.#userHistoryAPI.setCartNotifyFunction(async () => {
+      const cart = this.#cart;
+      const cartData = this.#userHistoryAPI.getCart();
+      const cartIdxs = cartData.map((data) => data.idx);
+      const cartAlbumsData = await this.#musicAPI.findAllByIdxs(cartIdxs);
 
-    const cartAlbums = cartAlbumsData.map((cartAlbumData) => {
-      const cartAlbum = new CartAlbum();
-      cartAlbum.init({
-        ...cartAlbumData,
-        count: cartData.find((data) => data.idx == cartAlbumData.idx).count,
+      const cartAlbums = cartAlbumsData.map((cartAlbumData) => {
+        const cartAlbum = new CartAlbum();
+        cartAlbum.init({
+          ...cartAlbumData,
+          count: cartData.find((data) => data.idx == cartAlbumData.idx).count,
+        });
+
+        return cartAlbum;
       });
-
-      return cartAlbum;
+      cart.setCartAlbums(cartAlbums);
     });
-
-    
-
-    cart.setCartAlbums(cartAlbums);
-    console.log(cartAlbums);
   }
 }
 

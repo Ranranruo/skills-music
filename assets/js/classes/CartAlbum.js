@@ -7,7 +7,9 @@ class CartAlbum {
   #release = "";
   #price = 0;
   #total = 0;
-  #count = 0;
+  #count = "0원";
+  #deleteEventFunction = () => {};
+  #changeCountEventFunction = () => {};
   init({
     idx,
     albumJaketImage,
@@ -24,7 +26,7 @@ class CartAlbum {
     this.#release = release;
     this.#price = price;
     this.#count = count;
-
+    console.log(this)
     this.render();
   }
   render() {
@@ -47,10 +49,10 @@ class CartAlbum {
       ￦ ${parseInt(this.#price).toLocaleString("ko-KR")}
     </td>
     <td class="albumqty">
-        <input type="number" class="form-control" value="1">
+        <input type="number" class="form-control" value="${this.#count}">
     </td>
     <td class="pricesum">
-      ￦ ${parseInt(this.#price).toLocaleString("ko-KR")}
+      ￦ ${(parseInt(this.#price) * this.#count).toLocaleString("ko-KR")}
     </td>
     <td>
       <button class="btn btn-default">
@@ -59,9 +61,19 @@ class CartAlbum {
     </td>`;
   }
   
+  applyEvents() {
+
+  }
+
   getElement() {
     return this.#element;
   }
+
+  setDeleteEventFunction(deleteEventFunction) {
+    this.#deleteEventFunction = deleteEventFunction;
+  }
+
+
 }
 
 export default CartAlbum;

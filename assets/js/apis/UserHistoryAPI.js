@@ -2,19 +2,19 @@ class UserHistoryAPI {
   activeCategoryNames = null;
   query = "";
   cart = [];
-  #cartNotifyFunction = () => {};
+  #cartNotifyFunction = async () => {};
   async init() {
     this.fetchData();
     this.saveData();
   }
 
-  fetchData() {
+  async fetchData() {
     const userHistory = JSON.parse(localStorage.getItem("userHistory"));
     this.activeCategoryNames = userHistory?.activeCategoryNames ?? ["ALL"];
     this.query = userHistory?.query ?? "";
     this.cart = userHistory?.cart ?? [];
     
-    this.#cartNotifyFunction();
+    await this.#cartNotifyFunction();
   }
 
   saveData() {
@@ -49,7 +49,8 @@ class UserHistoryAPI {
     this.#cartNotifyFunction();
   }
 
-  setCartNotifyFunction(cartNotifyFunction) {
+  async setCartNotifyFunction(cartNotifyFunction) {
+    await cartNotifyFunction();
     this.#cartNotifyFunction = cartNotifyFunction;
   }
 }
